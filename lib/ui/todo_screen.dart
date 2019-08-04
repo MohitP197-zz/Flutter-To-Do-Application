@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:todoapp/model/todo_item.dart';
+import 'package:todoapp/util/database_client.dart';
 
 class ToDoScreen extends StatefulWidget {
   @override
@@ -7,6 +9,17 @@ class ToDoScreen extends StatefulWidget {
 
 class _ToDoScreenState extends State<ToDoScreen> {
   final TextEditingController _textEditingController = TextEditingController();
+  var db = new DatabaseHelper();
+
+  void _handleSubmitted(String text) async {
+    _textEditingController.clear();
+
+    ToDoItem toDoItem = new ToDoItem(text, DateTime.now().toIso8601String());
+    int savedItemId = await db.saveItem(toDoItem);
+
+    print("Item Saved id: $savedItemId");
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -41,7 +54,7 @@ class _ToDoScreenState extends State<ToDoScreen> {
       actions: <Widget>[
         FlatButton(
           onPressed: () {
-            // _handleSubmit(_textEditingController.text);
+            _handleSubmitted(_textEditingController.text);
             _textEditingController.clear();
           },
           child: Text("Save"),
