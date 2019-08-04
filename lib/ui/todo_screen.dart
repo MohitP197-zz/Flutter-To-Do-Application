@@ -6,6 +6,7 @@ class ToDoScreen extends StatefulWidget {
 }
 
 class _ToDoScreenState extends State<ToDoScreen> {
+  final TextEditingController _textEditingController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -21,5 +22,40 @@ class _ToDoScreenState extends State<ToDoScreen> {
     );
   }
 
-  void _showFormDialog() {}
+  void _showFormDialog() {
+    var alert = AlertDialog(
+      content: Row(
+        children: <Widget>[
+          Expanded(
+              child: TextField(
+            controller: _textEditingController,
+            autofocus: true,
+            decoration: InputDecoration(
+              labelText: "Item",
+              hintText: "Eg. Don't buy stuff",
+              icon: Icon(Icons.note_add),
+            ),
+          )),
+        ],
+      ),
+      actions: <Widget>[
+        FlatButton(
+          onPressed: () {
+            // _handleSubmit(_textEditingController.text);
+            _textEditingController.clear();
+          },
+          child: Text("Save"),
+        ),
+        FlatButton(
+          onPressed: () => Navigator.pop(context),
+          child: Text("Cancel"),
+        ),
+      ],
+    );
+    showDialog(
+        context: context,
+        builder: (_) {
+          return alert;
+        });
+  }
 }
