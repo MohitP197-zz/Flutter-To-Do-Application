@@ -1,3 +1,5 @@
+import 'dart:collection';
+
 import 'package:flutter/material.dart';
 import 'package:todoapp/model/todo_item.dart';
 import 'package:todoapp/util/database_client.dart';
@@ -11,20 +13,64 @@ class _ToDoScreenState extends State<ToDoScreen> {
   final TextEditingController _textEditingController = TextEditingController();
   var db = new DatabaseHelper();
 
+  final List<ToDoItem> _itemList = <ToDoItem>[];
+
+  @override
+  void initState() {
+    super.initState();
+
+    _readToDoList();
+  }
+
   void _handleSubmitted(String text) async {
     _textEditingController.clear();
 
     ToDoItem toDoItem = new ToDoItem(text, DateTime.now().toIso8601String());
     int savedItemId = await db.saveItem(toDoItem);
 
-    print("Item Saved id: $savedItemId");
+    ToDoItem addedItem = await db.getItem(savedItemId);
+
+    setState(() {
+      _itemList.insert(0, addedItem);
+    });
+
+    print("Item Saved of id: $savedItemId");
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.black87,
-      body: Column(),
+      body: Column(
+        children: <Widget>[
+          Flexible(
+            child: ListView.builder(
+                padding: EdgeInsets.all(8.0),
+                reverse: false,
+                itemCount: _itemList.length,
+                itemBuilder: (_, int index) {
+                  return Card(
+                    color: Colors.white10,
+                    child: ListTile(
+                      title: _itemList[index],
+                      onLongPress: () => debugPrint(""),
+                      trailing: Listener(
+                        key: Key(_itemList[index].itemName),
+                        child: Icon(
+                          Icons.remove_circle,
+                          color: Colors.redAccent,
+                        ),
+                        onPointerDown: (pointerEvent) => debugPrint(""),
+                      ),
+                    ),
+                  );
+                }),
+          ),
+          Divider(
+            height: 1.0,
+          )
+        ],
+      ),
       floatingActionButton: FloatingActionButton(
           tooltip: "Add Item",
           backgroundColor: Colors.deepOrangeAccent,
@@ -44,8 +90,8 @@ class _ToDoScreenState extends State<ToDoScreen> {
             controller: _textEditingController,
             autofocus: true,
             decoration: InputDecoration(
-              labelText: "Item",
-              hintText: "Eg. Don't buy stuff",
+              labelText: "Task",
+              hintText: "Add a task",
               icon: Icon(Icons.note_add),
             ),
           )),
@@ -70,5 +116,14 @@ class _ToDoScreenState extends State<ToDoScreen> {
         builder: (_) {
           return alert;
         });
+  }
+
+  _readToDoList() async {
+    List items = await db.getItems();
+    items.forEach((item) {
+      // map is used as we are received these objects from list
+      ToDoItem toDoItem = ToDoItem.fromMap(item);
+      print("DB Items: ${toDoItem.itemName}");
+    });
   }
 }
