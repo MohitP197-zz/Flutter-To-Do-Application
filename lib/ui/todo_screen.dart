@@ -60,7 +60,9 @@ class _ToDoScreenState extends State<ToDoScreen> {
                           Icons.remove_circle,
                           color: Colors.redAccent,
                         ),
-                        onPointerDown: (pointerEvent) => debugPrint("Deleting"),
+                        onPointerDown: (pointerEvent) =>
+                            // pass object which is get from going to list and passing it through the index
+                            _deleteToDo(_itemList[index].id, index),
                       ),
                     ),
                   );
@@ -128,6 +130,16 @@ class _ToDoScreenState extends State<ToDoScreen> {
         _itemList.add(ToDoItem.map(item));
       });
       // print("DB Items: ${toDoItem.itemName}");
+    });
+  }
+
+  _deleteToDo(int id, int index) async {
+    debugPrint("Deleted successfully");
+
+    await db.deleteItem(id);
+
+    setState(() {
+      _itemList.removeAt(index);
     });
   }
 }
