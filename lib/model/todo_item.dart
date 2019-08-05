@@ -46,23 +46,28 @@ class ToDoItem extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Text(
-            _itemName,
-            style: TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-                fontSize: 16.9),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Text(
+                _itemName,
+                style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16.9),
+              ),
+              Container(
+                margin: const EdgeInsets.only(top: 5.0),
+                child: Text(
+                  "Created on: $_dateCreated",
+                  style: TextStyle(
+                      color: Colors.white70,
+                      fontSize: 13.5,
+                      fontStyle: FontStyle.italic),
+                ),
+              )
+            ],
           ),
-          Container(
-            margin: const EdgeInsets.only(top: 5.0),
-            child: Text(
-              "Created on: $_dateCreated",
-              style: TextStyle(
-                  color: Colors.white70,
-                  fontSize: 13.5,
-                  fontStyle: FontStyle.italic),
-            ),
-          )
         ],
       ),
     );
