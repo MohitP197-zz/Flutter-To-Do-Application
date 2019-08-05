@@ -59,7 +59,7 @@ class ToDoItem extends StatelessWidget {
               Container(
                 margin: const EdgeInsets.only(top: 5.0),
                 child: Text(
-                  "Created on: $_dateCreated",
+                  "Added on: $_dateCreated",
                   style: TextStyle(
                       color: Colors.white70,
                       fontSize: 13.5,

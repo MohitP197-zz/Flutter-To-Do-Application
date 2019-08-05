@@ -53,14 +53,14 @@ class _ToDoScreenState extends State<ToDoScreen> {
                     color: Colors.white10,
                     child: ListTile(
                       title: _itemList[index],
-                      onLongPress: () => debugPrint(""),
+                      onLongPress: () => debugPrint("Updating"),
                       trailing: Listener(
                         key: Key(_itemList[index].itemName),
                         child: Icon(
                           Icons.remove_circle,
                           color: Colors.redAccent,
                         ),
-                        onPointerDown: (pointerEvent) => debugPrint(""),
+                        onPointerDown: (pointerEvent) => debugPrint("Deleting"),
                       ),
                     ),
                   );
@@ -102,8 +102,9 @@ class _ToDoScreenState extends State<ToDoScreen> {
           onPressed: () {
             _handleSubmitted(_textEditingController.text);
             _textEditingController.clear();
+            Navigator.pop(context);
           },
-          child: Text("Save"),
+          child: Text("Add"),
         ),
         FlatButton(
           onPressed: () => Navigator.pop(context),
@@ -122,8 +123,11 @@ class _ToDoScreenState extends State<ToDoScreen> {
     List items = await db.getItems();
     items.forEach((item) {
       // map is used as we are received these objects from list
-      ToDoItem toDoItem = ToDoItem.fromMap(item);
-      print("DB Items: ${toDoItem.itemName}");
+      // ToDoItem toDoItem = ToDoItem.fromMap(item);
+      setState(() {
+        _itemList.add(ToDoItem.map(item));
+      });
+      // print("DB Items: ${toDoItem.itemName}");
     });
   }
 }
