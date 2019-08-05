@@ -54,15 +54,16 @@ class _ToDoScreenState extends State<ToDoScreen> {
                       title: _itemList[index],
                       onLongPress: () => _updateItem(_itemList[index], index),
                       trailing: Listener(
-                        key: Key(_itemList[index].itemName),
-                        child: Icon(
-                          Icons.remove_circle,
-                          color: Colors.redAccent,
-                        ),
-                        onPointerDown: (pointerEvent) =>
+                          key: Key(_itemList[index].itemName),
+                          child: Icon(
+                            Icons.remove_circle,
+                            color: Colors.redAccent,
+                          ),
+                          onPointerDown: (pointerEvent) {
                             // pass object which is get from going to list and passing it through the index
-                            _deleteToDo(_itemList[index].id, index),
-                      ),
+                            _deleteToDo(_itemList[index].id, index);
+                            _deletedSuccessfullySnackBar(context);
+                          }),
                     ),
                   );
                 }),
@@ -80,6 +81,13 @@ class _ToDoScreenState extends State<ToDoScreen> {
           ),
           onPressed: _showFormDialog),
     );
+  }
+
+  void _deletedSuccessfullySnackBar(BuildContext context) {
+    Scaffold.of(context).showSnackBar(SnackBar(
+      content: Text("Task deleted successfully"),
+      duration: Duration(seconds: 3),
+    ));
   }
 
   void _showFormDialog() {
@@ -104,6 +112,7 @@ class _ToDoScreenState extends State<ToDoScreen> {
             _handleSubmitted(_textEditingController.text);
             _textEditingController.clear();
             Navigator.pop(context);
+            _addedSuccessfullySnackBar();
           },
           child: Text("Add"),
         ),
@@ -118,6 +127,13 @@ class _ToDoScreenState extends State<ToDoScreen> {
         builder: (_) {
           return alert;
         });
+  }
+
+  void _addedSuccessfullySnackBar() {
+    Scaffold.of(context).showSnackBar(SnackBar(
+      content: Text("Task added successfully"),
+      duration: Duration(seconds: 3),
+    ));
   }
 
   _readToDoList() async {
@@ -175,6 +191,7 @@ class _ToDoScreenState extends State<ToDoScreen> {
             });
             _textEditingController.clear();
             Navigator.pop(context);
+            _updatedSuccessfullySnackBar();
           },
           child: Text("Update"),
         ),
@@ -189,6 +206,13 @@ class _ToDoScreenState extends State<ToDoScreen> {
         builder: (_) {
           return alert;
         });
+  }
+
+  void _updatedSuccessfullySnackBar() {
+    Scaffold.of(context).showSnackBar(SnackBar(
+      content: Text("Task updated successfully"),
+      duration: Duration(seconds: 3),
+    ));
   }
 
   void _handleUpdated(int index, ToDoItem item) {
