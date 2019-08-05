@@ -73,12 +73,13 @@ class _ToDoScreenState extends State<ToDoScreen> {
           )
         ],
       ),
-      floatingActionButton: FloatingActionButton(
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButton: FloatingActionButton.extended(
+          isExtended: true,
           tooltip: "Add Item",
           backgroundColor: Colors.deepOrangeAccent,
-          child: ListTile(
-            title: Icon(Icons.add),
-          ),
+          icon: Icon(Icons.add),
+          label: Text('New Task', textScaleFactor: 1.0),
           onPressed: _showFormDialog),
     );
   }
